@@ -117,6 +117,7 @@ class Woptical
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-woptical-admin.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-woptical-woocommerce-admin.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
@@ -155,6 +156,7 @@ class Woptical
         global $wpdb;
         $results = $wpdb->get_results("SELECT taxonomy FROM {$wpdb->prefix}term_taxonomy WHERE taxonomy LIKE '%pa_%' GROUP BY taxonomy", 'OBJECT');
         $plugin_admin = new Woptical_Admin($this->get_plugin_name(), $this->get_version());
+        $plugin_woo_admin = new Woptical_Woocommerce_Admin($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -179,6 +181,11 @@ class Woptical
             $this->loader->add_filter($action_manage_edit, $plugin_admin, 'display_image_column_heading');
             $this->loader->add_action($action_manage_custom, $plugin_admin, 'display_image_column_value', 10, 3);
         }
+
+        $this->loader->add_action('woocommerce_product_data_tabs', $plugin_woo_admin, 'woptical_custom_product_tab', 10, 1);
+        $this->loader->add_action('woocommerce_product_data_panels', $plugin_woo_admin, 'woptical_custom_tab_data');
+        $this->loader->add_action('woocommerce_process_product_meta_simple', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
+        $this->loader->add_action('woocommerce_process_product_meta_variable', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
     }
 
     /**
