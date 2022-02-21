@@ -158,8 +158,8 @@ class Woptical
         $plugin_admin = new Woptical_Admin($this->get_plugin_name(), $this->get_version());
         $plugin_woo_admin = new Woptical_Woocommerce_Admin($this->get_plugin_name(), $this->get_version());
 
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 99);
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 99);
 
         $this->loader->add_action('woocommerce_after_add_attribute_fields', $plugin_admin, 'woocommerce_custom_product_attribute_field');
         $this->loader->add_action('woocommerce_after_edit_attribute_fields', $plugin_admin, 'woocommerce_custom_product_attribute_field');
@@ -186,6 +186,9 @@ class Woptical
         $this->loader->add_action('woocommerce_product_data_panels', $plugin_woo_admin, 'woptical_custom_tab_data');
         $this->loader->add_action('woocommerce_process_product_meta_simple', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
         $this->loader->add_action('woocommerce_process_product_meta_variable', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
+
+        $this->loader->add_action('wp_ajax_get_attributes_prices_height', $plugin_woo_admin, 'ajax_get_attributes_prices_height_handler');
+        $this->loader->add_action('wp_ajax_get_attributes_prices_width', $plugin_woo_admin, 'ajax_get_attributes_prices_width_handler');
     }
 
     /**

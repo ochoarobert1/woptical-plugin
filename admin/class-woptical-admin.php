@@ -73,12 +73,79 @@ class Woptical_Admin
     public function enqueue_scripts()
     {
         wp_enqueue_script('handsometable_js', 'https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js', array('jquery'), $this->version, true);
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery' ), $this->version, false);
-        wp_localize_script('custom_wp_admin_js', 'custom_admin_url', array(
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery', 'handsometable_js' ), $this->version, false);
+        wp_localize_script($this->plugin_name, 'custom_admin_url', array(
             'custom_optical_far_price' => get_option('prices_table_1'),
             'custom_optical_near_price' => get_option('prices_table_2'),
+            'custom_window_width' => $this->ajax_get_attributes_prices_width_handler(),
+            'custom_window_height' => $this->ajax_get_attributes_prices_height_handler()
         ));
         wp_enqueue_media();
+    }
+
+    public function ajax_get_attributes_prices_width_handler()
+    {
+        global $wpdb;
+        $arrMaster = array();
+        $arrData = $wpdb->get_results("SELECT term_id FROM $wpdb->term_taxonomy WHERE taxonomy = 'pa_cristales'", ARRAY_A);
+        $i = 0;
+        foreach ($arrData as $item) {
+            $varTerm = get_term_by('ID', $item['term_id'], 'pa_cristales');
+            $menu_order = get_term_meta($item['term_id'], 'order', true);
+            if ($menu_order == '') {
+                $menu_order = $i;
+            }
+            $arraySort[$menu_order] = $varTerm->term_id;
+            $i++;
+        }
+
+        ksort($arraySort);
+
+        foreach ($arraySort as $item) {
+            $varTerm = get_term_by('ID', $item, 'pa_cristales');
+            $arrWidth[] = $varTerm->name;
+        }
+
+        foreach ($arrWidth as $item) {
+            $masterData[] = $item;
+        }
+
+        $response = json_encode($masterData);
+        return $response;
+        wp_die();
+    }
+
+
+    public function ajax_get_attributes_prices_height_handler()
+    {
+        global $wpdb;
+        $arrMaster = array();
+        $arrData = $wpdb->get_results("SELECT term_id FROM $wpdb->term_taxonomy WHERE taxonomy = 'pa_esfera'", ARRAY_A);
+        $i = 0;
+        foreach ($arrData as $item) {
+            $varTerm = get_term_by('ID', $item['term_id'], 'pa_esfera');
+            $menu_order = get_term_meta($item['term_id'], 'order', true);
+            if ($menu_order == '') {
+                $menu_order = $i;
+            }
+            $arraySort[$menu_order] = $varTerm->term_id;
+            $i++;
+        }
+
+        ksort($arraySort);
+
+        foreach ($arraySort as $item) {
+            $varTerm = get_term_by('ID', $item, 'pa_esfera');
+            $arrHeight[] = $varTerm->name;
+        }
+
+        foreach ($arrHeight as $item) {
+            $masterData[] = $item;
+        }
+
+        $response = json_encode($masterData);
+        return $response;
+        wp_die();
     }
 
     /**

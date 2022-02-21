@@ -37,13 +37,16 @@ jQuery(document).ready(function($) {
         }
     });
 
-	var dataActual = [];
+    var dataActual = [];
     var dataActual2 = [];
-    var dataCol = jQuery.parseJSON(custom_admin_url.custom_window_width);
-    var dataRow = jQuery.parseJSON(custom_admin_url.custom_window_height);
+    var dataCol = jQuery.parseJSON(custom_admin_url.custom_window_height);
+    var dataRow = jQuery.parseJSON(custom_admin_url.custom_window_width);
+
+    console.log(dataCol);
+    console.log(dataRow);
 
     /* TABLE 2 */
-    var dataActual = custom_admin_url.custom_table_price_1;
+    var dataActual = custom_admin_url.custom_optical_far_price;
     dataActual = dataActual.replace(/\\/g, "");
 
     if (dataActual != '') {
@@ -57,10 +60,11 @@ jQuery(document).ready(function($) {
     } else {
         getTable(dataRow, dataCol).then((data) => {
                 dataActual = data;
+                //console.table(dataActual);
                 jQuery("#specialPrice1").handsontable({
-                    data: dataActual,
-                    rowHeaders: dataRow,
-                    colHeaders: dataCol,
+                    //data: dataActual,
+                    rowHeaders: 8,
+                    colHeaders: 8,
                     contextMenu: false,
                     licenseKey: 'non-commercial-and-evaluation'
                 });
@@ -70,7 +74,7 @@ jQuery(document).ready(function($) {
             });
     }
     /* TABLE 2 */
-    var dataActual2 = custom_admin_url.custom_table_price_2;
+    var dataActual2 = custom_admin_url.custom_optical_near_price;
     dataActual2 = dataActual2.replace(/\\/g, "");
 
     if (dataActual2 != '') {
@@ -97,3 +101,59 @@ jQuery(document).ready(function($) {
             });
     }
 });
+
+function getWidth() {
+    var tmp = [];
+    jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+            action: 'get_attributes_prices_width'
+        },
+        success: function(response) {
+            var respuesta = jQuery.parseJSON(response);
+            for (let i = 0; i < respuesta.length; i++) {
+                tmp[i] = respuesta[i];
+            }
+            return tmp;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            reject(error);
+        }
+    });
+}
+
+function getHeight() {
+    var tmp = [];
+    jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+            action: 'get_attributes_prices_height'
+        },
+        success: function(response) {
+            var respuesta = jQuery.parseJSON(response);
+            for (let i = 0; i < respuesta.length; i++) {
+                tmp[i] = respuesta[i];
+            }
+            return tmp;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            reject(error);
+        }
+    });
+}
+
+function getTable(dataRow, dataCol) {
+    return new Promise((resolve, reject) => {
+        var tmp = [];
+        for (var i = 0; i < dataRow.length; i++) {
+            var dataTrans = [];
+            for (var y = 0; y < dataCol.length; y++) {
+                dataTrans[y] = null;
+            }
+            tmp[i] = dataTrans;
+        }
+        resolve(tmp);
+    });
+}
