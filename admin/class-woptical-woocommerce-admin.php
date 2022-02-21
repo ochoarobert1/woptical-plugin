@@ -128,7 +128,7 @@ class Woptical_Woocommerce_Admin
 
         $select_field = $_POST['selected_optical_terms'];
         if (!empty($select_field)) {
-            update_post_meta($post_id, 'selected_optical_terms', esc_attr($select_field));
+            update_post_meta($post_id, 'selected_optical_terms', $select_field);
         }
     }
 }
