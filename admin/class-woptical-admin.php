@@ -62,7 +62,8 @@ class Woptical_Admin
     public function enqueue_styles()
     {
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/woptical-admin.css', array(), $this->version, 'all');
-        wp_enqueue_style('handsometable_css', 'https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css', array(), $this->version, 'all');
+        wp_enqueue_style('jexcel-css', 'https://bossanova.uk/jspreadsheet/v4/jexcel.css', array(), $this->version, 'all');
+        wp_enqueue_style('jexcel-theme-css', 'https://jsuites.net/v4/jsuites.css', array(), $this->version, 'all');
     }
 
     /**
@@ -72,11 +73,10 @@ class Woptical_Admin
      */
     public function enqueue_scripts()
     {
-        wp_enqueue_script('handsometable_js', 'https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js', array('jquery'), $this->version, true);
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery', 'handsometable_js' ), $this->version, false);
+        wp_enqueue_script('jexcel-js', 'https://bossanova.uk/jspreadsheet/v4/jexcel.js', array('jquery'), $this->version, true);
+        wp_enqueue_script('jexcel-suite', 'https://jsuites.net/v4/jsuites.js', array('jquery', 'jexcel-js'), $this->version, true);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery', 'jexcel-js', 'jexcel-suite' ), $this->version, false);
         wp_localize_script($this->plugin_name, 'custom_admin_url', array(
-            'custom_optical_far_price' => get_option('prices_table_1'),
-            'custom_optical_near_price' => get_option('prices_table_2'),
             'custom_window_width' => $this->ajax_get_attributes_prices_width_handler(),
             'custom_window_height' => $this->ajax_get_attributes_prices_height_handler()
         ));

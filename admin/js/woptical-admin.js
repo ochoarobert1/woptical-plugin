@@ -45,115 +45,62 @@ jQuery(document).ready(function($) {
     console.log(dataCol);
     console.log(dataRow);
 
-    /* TABLE 2 */
-    var dataActual = custom_admin_url.custom_optical_far_price;
-    dataActual = dataActual.replace(/\\/g, "");
+    var data = [
+        ['Jazz', 'Honda', '2019-02-12', '', true, '$ 2.000,00', '#777700'],
+        ['Civic', 'Honda', '2018-07-11', '', true, '$ 4.000,01', '#007777'],
+    ];
+     
+    jspreadsheet(document.getElementById('specialPrice1'), {
+        data:data,
+        columns: [
+            {
+                type: 'text',
+                title:'Car',
+                width:90
+            },
+            {
+                type: 'dropdown',
+                title:'Make',
+                width:120,
+                source:[
+                    "Alfa Romeo",
+                    "Audi",
+                    "Bmw",
+                    "Chevrolet",
+                    "Chrystler",
+                    // (...)
+                  ]
+            },
+            {
+                type: 'calendar',
+                title:'Available',
+                width:120
+            },
+            {
+                type: 'image',
+                title:'Photo',
+                width:120
+            },
+            {
+                type: 'checkbox',
+                title:'Stock',
+                width:80
+            },
+            {
+                type: 'numeric',
+                title:'Price',
+                mask:'$ #.##,00',
+                width:80,
+                decimal:','
+            },
+            {
+                type: 'color',
+                width:80,
+                render:'square',
+            },
+         ]
+    });
 
-    if (dataActual != '') {
-        jQuery("#specialPrice1").handsontable({
-            data: JSON.parse(dataActual),
-            rowHeaders: dataRow,
-            colHeaders: dataCol,
-            contextMenu: false,
-            licenseKey: 'non-commercial-and-evaluation'
-        });
-    } else {
-        getTable(dataRow, dataCol).then((data) => {
-                dataActual = data;
-                //console.table(dataActual);
-                jQuery("#specialPrice1").handsontable({
-                    //data: dataActual,
-                    rowHeaders: 8,
-                    colHeaders: 8,
-                    contextMenu: false,
-                    licenseKey: 'non-commercial-and-evaluation'
-                });
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    }
-    /* TABLE 2 */
-    var dataActual2 = custom_admin_url.custom_optical_near_price;
-    dataActual2 = dataActual2.replace(/\\/g, "");
-
-    if (dataActual2 != '') {
-        jQuery("#specialPrice2").handsontable({
-            data: JSON.parse(dataActual2),
-            rowHeaders: dataRow,
-            colHeaders: dataCol,
-            contextMenu: false,
-            licenseKey: 'non-commercial-and-evaluation'
-        });
-    } else {
-        getTable(dataRow, dataCol).then((data) => {
-                dataActual2 = data;
-                jQuery("#specialPrice2").handsontable({
-                    data: dataActual2,
-                    rowHeaders: dataRow,
-                    colHeaders: dataCol,
-                    contextMenu: false,
-                    licenseKey: 'non-commercial-and-evaluation'
-                });
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    }
+    
 });
 
-function getWidth() {
-    var tmp = [];
-    jQuery.ajax({
-        type: 'POST',
-        url: ajaxurl,
-        data: {
-            action: 'get_attributes_prices_width'
-        },
-        success: function(response) {
-            var respuesta = jQuery.parseJSON(response);
-            for (let i = 0; i < respuesta.length; i++) {
-                tmp[i] = respuesta[i];
-            }
-            return tmp;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            reject(error);
-        }
-    });
-}
-
-function getHeight() {
-    var tmp = [];
-    jQuery.ajax({
-        type: 'POST',
-        url: ajaxurl,
-        data: {
-            action: 'get_attributes_prices_height'
-        },
-        success: function(response) {
-            var respuesta = jQuery.parseJSON(response);
-            for (let i = 0; i < respuesta.length; i++) {
-                tmp[i] = respuesta[i];
-            }
-            return tmp;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            reject(error);
-        }
-    });
-}
-
-function getTable(dataRow, dataCol) {
-    return new Promise((resolve, reject) => {
-        var tmp = [];
-        for (var i = 0; i < dataRow.length; i++) {
-            var dataTrans = [];
-            for (var y = 0; y < dataCol.length; y++) {
-                dataTrans[y] = null;
-            }
-            tmp[i] = dataTrans;
-        }
-        resolve(tmp);
-    });
-}
