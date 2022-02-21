@@ -116,6 +116,18 @@ class Woptical_Woocommerce_Admin
         );
 
         ?>
+        <div class="special-table-container">
+                <h2>Tabla Precios 3% - 5% - 10%</h2>
+                <div id="specialPrice1" class="special-price-table">
+
+                </div>
+            </div>
+            <div class="special-table-container">
+                <h2>Tabla Precios 1% - Blackout</h2>
+                <div id="specialPrice2" class="special-price-table">
+
+                </div>
+            </div>
     </div>
 </div>
 <?php

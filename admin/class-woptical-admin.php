@@ -62,6 +62,7 @@ class Woptical_Admin
     public function enqueue_styles()
     {
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/woptical-admin.css', array(), $this->version, 'all');
+        wp_enqueue_style('handsometable_css', 'https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css', array(), $this->version, 'all');
     }
 
     /**
@@ -71,7 +72,12 @@ class Woptical_Admin
      */
     public function enqueue_scripts()
     {
+        wp_enqueue_script('handsometable_js', 'https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js', array('jquery'), $this->version, true);
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery' ), $this->version, false);
+        wp_localize_script('custom_wp_admin_js', 'custom_admin_url', array(
+            'custom_optical_far_price' => get_option('prices_table_1'),
+            'custom_optical_near_price' => get_option('prices_table_2'),
+        ));
         wp_enqueue_media();
     }
 

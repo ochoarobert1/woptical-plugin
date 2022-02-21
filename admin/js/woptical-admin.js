@@ -36,4 +36,64 @@ jQuery(document).ready(function($) {
             }
         }
     });
+
+	var dataActual = [];
+    var dataActual2 = [];
+    var dataCol = jQuery.parseJSON(custom_admin_url.custom_window_width);
+    var dataRow = jQuery.parseJSON(custom_admin_url.custom_window_height);
+
+    /* TABLE 2 */
+    var dataActual = custom_admin_url.custom_table_price_1;
+    dataActual = dataActual.replace(/\\/g, "");
+
+    if (dataActual != '') {
+        jQuery("#specialPrice1").handsontable({
+            data: JSON.parse(dataActual),
+            rowHeaders: dataRow,
+            colHeaders: dataCol,
+            contextMenu: false,
+            licenseKey: 'non-commercial-and-evaluation'
+        });
+    } else {
+        getTable(dataRow, dataCol).then((data) => {
+                dataActual = data;
+                jQuery("#specialPrice1").handsontable({
+                    data: dataActual,
+                    rowHeaders: dataRow,
+                    colHeaders: dataCol,
+                    contextMenu: false,
+                    licenseKey: 'non-commercial-and-evaluation'
+                });
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+    /* TABLE 2 */
+    var dataActual2 = custom_admin_url.custom_table_price_2;
+    dataActual2 = dataActual2.replace(/\\/g, "");
+
+    if (dataActual2 != '') {
+        jQuery("#specialPrice2").handsontable({
+            data: JSON.parse(dataActual2),
+            rowHeaders: dataRow,
+            colHeaders: dataCol,
+            contextMenu: false,
+            licenseKey: 'non-commercial-and-evaluation'
+        });
+    } else {
+        getTable(dataRow, dataCol).then((data) => {
+                dataActual2 = data;
+                jQuery("#specialPrice2").handsontable({
+                    data: dataActual2,
+                    rowHeaders: dataRow,
+                    colHeaders: dataCol,
+                    contextMenu: false,
+                    licenseKey: 'non-commercial-and-evaluation'
+                });
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
 });
