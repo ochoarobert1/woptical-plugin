@@ -77,8 +77,9 @@ class Woptical_Admin
         wp_enqueue_script('jexcel-suite', 'https://jsuites.net/v4/jsuites.js', array('jquery', 'jexcel-js'), $this->version, true);
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery', 'jexcel-js', 'jexcel-suite' ), $this->version, false);
         wp_localize_script($this->plugin_name, 'custom_admin_url', array(
-            'custom_window_width' => $this->ajax_get_attributes_prices_width_handler(),
-            'custom_window_height' => $this->ajax_get_attributes_prices_height_handler()
+            'custom_crystal_values' => $this->ajax_get_attributes_prices_width_handler(),
+            'custom_spheres_values' => $this->ajax_get_attributes_prices_height_handler(),
+            'custom_pricing_table' => get_option('custom_pricing_table')
         ));
         wp_enqueue_media();
     }
@@ -221,28 +222,28 @@ class Woptical_Admin
      * @since    1.0.0
      */
     public function update_woocommerce_terms_image($term, $taxonomy) { ?>
-	<tr class="form-field term-group-wrap">
-		<th scope="row">
-			<label for="image_id"><?php _e('Image', 'woptical'); ?></label>
-		</th>
-		<td>
-			<?php $image_id = get_term_meta($term -> term_id, 'image_id', true); ?>
-			<input type="hidden" id="image_id" name="image_id" value="<?php echo $image_id; ?>">
+<tr class="form-field term-group-wrap">
+    <th scope="row">
+        <label for="image_id"><?php _e('Image', 'woptical'); ?></label>
+    </th>
+    <td>
+        <?php $image_id = get_term_meta($term -> term_id, 'image_id', true); ?>
+        <input type="hidden" id="image_id" name="image_id" value="<?php echo $image_id; ?>">
 
-			<div id="image_wrapper">
-				<?php if ($image_id) { ?>
-				<?php echo wp_get_attachment_image($image_id, 'thumbnail'); ?>
-				<?php } ?>
-			</div>
+        <div id="image_wrapper">
+            <?php if ($image_id) { ?>
+            <?php echo wp_get_attachment_image($image_id, 'thumbnail'); ?>
+            <?php } ?>
+        </div>
 
-			<p>
-				<input type="button" class="button button-secondary taxonomy_media_button" id="taxonomy_media_button" name="taxonomy_media_button" value="<?php _e('Add', 'woptical'); ?>">
-				<input type="button" class="button button-secondary taxonomy_media_remove" id="taxonomy_media_remove" name="taxonomy_media_remove" value="<?php _e('Remove', 'woptical'); ?>">
-			</p>
+        <p>
+            <input type="button" class="button button-secondary taxonomy_media_button" id="taxonomy_media_button" name="taxonomy_media_button" value="<?php _e('Add', 'woptical'); ?>">
+            <input type="button" class="button button-secondary taxonomy_media_remove" id="taxonomy_media_remove" name="taxonomy_media_remove" value="<?php _e('Remove', 'woptical'); ?>">
+        </p>
 
-		</td>
-	</tr>
-	<?php
+    </td>
+</tr>
+<?php
     }
 
     /**
@@ -284,5 +285,41 @@ class Woptical_Admin
             $columns = wp_get_attachment_image($image_id, array('50', '50'));
         }
         return $columns;
+    }
+
+    public function register_my_custom_submenu_page()
+    {
+        add_submenu_page('edit.php?post_type=product', __('Optical Lens Pricing', 'woptical'), __('Optical Lens Pricing', 'woptical'), 'manage_options', 'woptical-pricing', array($this, 'my_custom_submenu_page_callback' ));
+    }
+    
+    public function my_custom_submenu_page_callback()
+    {
+        ?>
+<div class="wrap">
+    <h1><?php echo get_admin_page_title(); ?></h1>
+    <form class="special-table-container">
+        <div id="specialPrice1" class="special-price-table">
+
+        </div>
+        <div class="submit">
+            <button id="submitTable" class="button button-primary"><?php _e('Save Changes', 'woptical'); ?></button>
+        </div>
+        <div id="responseTable" class="response"></div>
+    </form>
+</div>
+<?php
+    }
+
+    public function custom_pricing_table_save_data_handler()
+    {
+        update_option('custom_pricing_table', $_POST['info']);
+        ob_start(); ?>
+        <div class="custom-response">
+            <?php _e('Price List Updated', 'woptical'); ?>
+        </div>
+<?php
+        $content = ob_get_clean();
+        wp_send_json_success($content, 200);
+        wp_die();
     }
 }

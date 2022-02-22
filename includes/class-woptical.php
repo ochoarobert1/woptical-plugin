@@ -182,6 +182,9 @@ class Woptical
             $this->loader->add_action($action_manage_custom, $plugin_admin, 'display_image_column_value', 10, 3);
         }
 
+        $this->loader->add_action('admin_menu', $plugin_admin, 'register_my_custom_submenu_page', 99);
+        $this->loader->add_action('wp_ajax_custom_pricing_table_save_data', $plugin_admin, 'custom_pricing_table_save_data_handler', 99);
+
         $this->loader->add_action('woocommerce_product_data_tabs', $plugin_woo_admin, 'woptical_custom_product_tab', 10, 1);
         $this->loader->add_action('woocommerce_product_data_panels', $plugin_woo_admin, 'woptical_custom_tab_data');
         $this->loader->add_action('woocommerce_process_product_meta_simple', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');

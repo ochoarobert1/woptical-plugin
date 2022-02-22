@@ -37,70 +37,73 @@ jQuery(document).ready(function($) {
         }
     });
 
-    var dataActual = [];
-    var dataActual2 = [];
-    var dataCol = jQuery.parseJSON(custom_admin_url.custom_window_height);
-    var dataRow = jQuery.parseJSON(custom_admin_url.custom_window_width);
 
-    console.log(dataCol);
-    console.log(dataRow);
+    if (document.getElementById('specialPrice1')) {
+        var data = []
+        var currentColumns = [];
+        var dataActual = custom_admin_url.custom_pricing_table;
+        //var dataActual = [];
+        var dataCol = jQuery.parseJSON(custom_admin_url.custom_spheres_values);
+        var dataRow = jQuery.parseJSON(custom_admin_url.custom_crystal_values);
 
-    var data = [
-        ['Jazz', 'Honda', '2019-02-12', '', true, '$ 2.000,00', '#777700'],
-        ['Civic', 'Honda', '2018-07-11', '', true, '$ 4.000,01', '#007777'],
-    ];
-     
-    jspreadsheet(document.getElementById('specialPrice1'), {
-        data:data,
-        columns: [
-            {
+        dataActual = JSON.parse(dataActual.replace(/\\/g, ""));
+
+        var columnsVar = {
+            type: 'text',
+            title: 'Esfera/Cristales',
+            width: 100
+        }
+        currentColumns.push(columnsVar);
+
+
+
+        for (let index = 0; index < dataCol.length; index++) {
+            columnsVar = {
                 type: 'text',
-                title:'Car',
-                width:90
-            },
-            {
-                type: 'dropdown',
-                title:'Make',
-                width:120,
-                source:[
-                    "Alfa Romeo",
-                    "Audi",
-                    "Bmw",
-                    "Chevrolet",
-                    "Chrystler",
-                    // (...)
-                  ]
-            },
-            {
-                type: 'calendar',
-                title:'Available',
-                width:120
-            },
-            {
-                type: 'image',
-                title:'Photo',
-                width:120
-            },
-            {
-                type: 'checkbox',
-                title:'Stock',
-                width:80
-            },
-            {
-                type: 'numeric',
-                title:'Price',
-                mask:'$ #.##,00',
-                width:80,
-                decimal:','
-            },
-            {
-                type: 'color',
-                width:80,
-                render:'square',
-            },
-         ]
-    });
+                title: dataCol[index],
+                width: 50
+            }
+            currentColumns.push(columnsVar);
+        }
+        if (dataActual.length == 0) {
+            for (let index = 0; index < dataRow.length; index++) {
+                data[index] = [dataRow[index]];
+            }
 
-    
+        } else {
+            var data = dataActual;
+        }
+
+        jspreadsheet(document.getElementById('specialPrice1'), {
+            data: data,
+            freezeColumns: 2,
+            columns: currentColumns,
+            minDimensions: [dataCol.length, dataRow.length],
+        });
+
+        jQuery('#submitTable').on('click', function(e) {
+            e.preventDefault();
+
+            var data = document.getElementById('specialPrice1').jspreadsheet.getData();
+
+            jQuery.ajax({
+                method: 'POST',
+                url: ajaxurl,
+                data: {
+                    action: 'custom_pricing_table_save_data',
+                    info: JSON.stringify(data)
+                },
+                beforeSend: function() {
+                    jQuery('#responseTable').html('<div class="loader-ring"><div></div><div></div><div></div><div></div></div>');
+                },
+                success: function(response) {
+                    jQuery('#responseTable').html(response.data);
+                },
+                error: function(request, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+
+    }
 });
-
