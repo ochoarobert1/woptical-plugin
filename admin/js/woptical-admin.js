@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
             custom_media = true;
             wp.media.editor.send.attachment = function(props, attachment) {
                 if (custom_media) {
-                    $('#image_id').val(attachment.id);
+                    $('#category_image_id').val(attachment.id);
                     $('#image_wrapper').html('<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />');
                     $('#image_wrapper .custom_media_image').attr('src', attachment.url).css('display', 'block');
                 } else {
@@ -22,7 +22,7 @@ jQuery(document).ready(function($) {
     }
     taxonomy_media_upload('.taxonomy_media_button.button');
     $('body').on('click', '.taxonomy_media_remove', function() {
-        $('#image_id').val('');
+        $('#category_image_id').val('');
         $('#image_wrapper').html('<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />');
     });
 
@@ -44,13 +44,13 @@ jQuery(document).ready(function($) {
         var dataActual = custom_admin_url.custom_pricing_table;
         //var dataActual = [];
         var dataCol = jQuery.parseJSON(custom_admin_url.custom_spheres_values);
-        var dataRow = jQuery.parseJSON(custom_admin_url.custom_crystal_values);
+        var dataRow = jQuery.parseJSON(custom_admin_url.custom_cilinder_values);
 
         dataActual = JSON.parse(dataActual.replace(/\\/g, ""));
 
         var columnsVar = {
             type: 'text',
-            title: 'Esfera/Cristales',
+            title: 'Spheres/Cilinders',
             width: 100
         }
         currentColumns.push(columnsVar);

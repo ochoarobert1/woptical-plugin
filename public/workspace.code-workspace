@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\woocommerce"
+		},
+		{
+			"path": "..\\..\\..\\..\\wp-includes"
+		}
+	],
+	"settings": {}
+}

@@ -1,32 +1,37 @@
-(function( $ ) {
-	'use strict';
+let wopticalAccordion = '',
+    wopticalOptions = '';
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+function wopticalLoaded() {
+    console.log('Function Loaded');
 
-})( jQuery );
+
+    wopticalOptions = document.getElementsByClassName('custom-option-item');
+    if (wopticalOptions) {
+        for (let index = 0; index < wopticalOptions.length; index++) {
+            wopticalOptions[index].addEventListener('click', function(e) {
+				e.stopPropagation();
+                var label = wopticalOptions[index].getAttribute('data-label');
+                var headingId = wopticalOptions[index].parentElement.previousElementSibling.getAttribute('id');
+				var labelSpan = document.querySelector('#' + headingId + ' span').innerHTML;
+				document.querySelector('#' + headingId + ' span').innerHTML = labelSpan + ' ' + label;
+				document.querySelector('#' + headingId + ' span').classList.remove('selected-hidden');
+            });
+        }
+    }
+
+    wopticalAccordion = document.getElementsByClassName('custom-option-title');
+    if (wopticalAccordion) {
+        for (let index = 0; index < wopticalAccordion.length; index++) {
+            const element = wopticalAccordion[index];
+            element.addEventListener('click', function() {
+                for (let indexY = 0; indexY < wopticalAccordion.length; indexY++) {
+                    wopticalAccordion[indexY].parentElement.classList.remove('show');
+                }
+                this.parentElement.classList.toggle('show');
+            });
+        }
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", wopticalLoaded, false);

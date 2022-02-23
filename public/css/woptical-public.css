@@ -1,4 +1,66 @@
-/**
- * All of the CSS for your public-facing functionality should be
- * included in this file.
- */
+/* --------------------------------------------------------------
+ * MAIN LESS MIXINS AND FUNCTIONS - LESSHAT
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+ * WOOCOMMERCE MAIN OVERRIDES
+-------------------------------------------------------------- */
+.custom-optical-options-item-content .custom-option-title {
+  cursor: pointer;
+}
+.custom-optical-options-item-content .custom-option-title .selected {
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  font-weight: 400;
+}
+.custom-optical-options-item-content .custom-option-title .selected-hidden {
+  display: none;
+}
+.custom-optical-options-item-content .custom-options-content {
+  height: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -moz-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: start;
+  -moz-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  -webkit-transition: height 0.3s ease-in-out;
+  -moz-transition: height 0.3s ease-in-out;
+  -o-transition: height 0.3s ease-in-out;
+  transition: height 0.3s ease-in-out;
+}
+.custom-optical-options-item-content .custom-options-content .custom-option-item {
+  position: relative;
+  -webkit-box-flex: 0;
+  -moz-box-flex: 0;
+  -webkit-flex: 0 0 25%;
+  -ms-flex: 0 0 25%;
+  flex: 0 0 25%;
+  max-width: 25%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+  text-align: center;
+}
+.custom-optical-options-item-content .custom-options-content .custom-option-item h4 {
+  font-size: 1rem;
+  min-height: 50px;
+  margin-bottom: 0;
+}
+.custom-optical-options-item-content .custom-options-content .custom-option-item input[type=radio] {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+}
+.show .custom-options-content {
+  height: auto !important;
+}

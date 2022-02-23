@@ -155,6 +155,7 @@ class Woptical
     {
         global $wpdb;
         $results = $wpdb->get_results("SELECT taxonomy FROM {$wpdb->prefix}term_taxonomy WHERE taxonomy LIKE '%pa_%' GROUP BY taxonomy", 'OBJECT');
+        $attributes_tax_slugs = array_keys( wc_get_attribute_taxonomy_labels() );
         $plugin_admin = new Woptical_Admin($this->get_plugin_name(), $this->get_version());
         $plugin_woo_admin = new Woptical_Woocommerce_Admin($this->get_plugin_name(), $this->get_version());
 
@@ -167,13 +168,13 @@ class Woptical
         $this->loader->add_action('woocommerce_attribute_added', $plugin_admin, 'save_woocommerce_custom_product_attribute');
         $this->loader->add_action('woocommerce_attribute_updated', $plugin_admin, 'save_woocommerce_custom_product_attribute');
 
-        foreach ($results as $item) {
-            $action_add_image = $item->taxonomy . '_add_form_fields';
-            $action_edit_image = $item->taxonomy . '_edit_form_fields';
-            $action_created_image = 'created_' . $item->taxonomy;
-            $action_edited_image = 'edited_' . $item->taxonomy;
-            $action_manage_edit = 'manage_edit-' . $item->taxonomy . '_columns';
-            $action_manage_custom = 'manage_' . $item->taxonomy . '_custom_column';
+        foreach ($attributes_tax_slugs as $key => $value) {
+            $action_add_image = 'pa_' . $value . '_add_form_fields';
+            $action_edit_image = 'pa_' . $value . '_edit_form_fields';
+            $action_created_image = 'created_' . 'pa_' . $value;
+            $action_edited_image = 'edited_' . 'pa_' . $value;
+            $action_manage_edit = 'manage_edit-' . 'pa_' . $value . '_columns';
+            $action_manage_custom = 'manage_' . 'pa_' . $value . '_custom_column';
             $this->loader->add_action($action_add_image, $plugin_admin, 'add_woocommerce_terms_image', 10, 2);
             $this->loader->add_action($action_created_image, $plugin_admin, 'save_woocommerce_terms_image', 10, 2);
             $this->loader->add_action($action_edit_image, $plugin_admin, 'update_woocommerce_terms_image', 10, 2);
@@ -190,8 +191,8 @@ class Woptical
         $this->loader->add_action('woocommerce_process_product_meta_simple', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
         $this->loader->add_action('woocommerce_process_product_meta_variable', $plugin_woo_admin, 'woptical_save_proddata_custom_fields');
 
-        $this->loader->add_action('wp_ajax_get_attributes_prices_height', $plugin_woo_admin, 'ajax_get_attributes_prices_height_handler');
-        $this->loader->add_action('wp_ajax_get_attributes_prices_width', $plugin_woo_admin, 'ajax_get_attributes_prices_width_handler');
+        $this->loader->add_action('wp_ajax_get_attributes_spheres', $plugin_woo_admin, 'ajax_get_attributes_spheres_handler');
+        $this->loader->add_action('wp_ajax_get_attributes_cilinder', $plugin_woo_admin, 'ajax_get_attributes_cilinder_handler');
     }
 
     /**
@@ -207,6 +208,10 @@ class Woptical
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+
+        $this->loader->add_action('woocommerce_single_product_summary', $plugin_public, 'custom_optical_selections', 27);
+
+        
     }
 
     /**

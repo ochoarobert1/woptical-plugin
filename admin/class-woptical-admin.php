@@ -77,21 +77,21 @@ class Woptical_Admin
         wp_enqueue_script('jexcel-suite', 'https://jsuites.net/v4/jsuites.js', array('jquery', 'jexcel-js'), $this->version, true);
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woptical-admin.js', array( 'jquery', 'jexcel-js', 'jexcel-suite' ), $this->version, false);
         wp_localize_script($this->plugin_name, 'custom_admin_url', array(
-            'custom_crystal_values' => $this->ajax_get_attributes_prices_width_handler(),
-            'custom_spheres_values' => $this->ajax_get_attributes_prices_height_handler(),
+            'custom_cilinder_values' => $this->ajax_get_attributes_cilinder_handler(),
+            'custom_spheres_values' => $this->ajax_get_attributes_spheres_handler(),
             'custom_pricing_table' => get_option('custom_pricing_table')
         ));
         wp_enqueue_media();
     }
 
-    public function ajax_get_attributes_prices_width_handler()
+    public function ajax_get_attributes_cilinder_handler()
     {
         global $wpdb;
         $arrMaster = array();
-        $arrData = $wpdb->get_results("SELECT term_id FROM $wpdb->term_taxonomy WHERE taxonomy = 'pa_cristales'", ARRAY_A);
+        $arrData = $wpdb->get_results("SELECT term_id FROM $wpdb->term_taxonomy WHERE taxonomy = 'pa_cilindro'", ARRAY_A);
         $i = 0;
         foreach ($arrData as $item) {
-            $varTerm = get_term_by('ID', $item['term_id'], 'pa_cristales');
+            $varTerm = get_term_by('ID', $item['term_id'], 'pa_cilindro');
             $menu_order = get_term_meta($item['term_id'], 'order', true);
             if ($menu_order == '') {
                 $menu_order = $i;
@@ -103,7 +103,7 @@ class Woptical_Admin
         ksort($arraySort);
 
         foreach ($arraySort as $item) {
-            $varTerm = get_term_by('ID', $item, 'pa_cristales');
+            $varTerm = get_term_by('ID', $item, 'pa_cilindro');
             $arrWidth[] = $varTerm->name;
         }
 
@@ -117,7 +117,7 @@ class Woptical_Admin
     }
 
 
-    public function ajax_get_attributes_prices_height_handler()
+    public function ajax_get_attributes_spheres_handler()
     {
         global $wpdb;
         $arrMaster = array();
@@ -192,8 +192,8 @@ class Woptical_Admin
     {
         ?>
 <div class="form-field term-group">
-    <label for="image_id"><?php _e('Image', 'woptical'); ?></label>
-    <input type="hidden" id="image_id" name="image_id" class="custom_media_url" value="">
+    <label for="category_image_id"><?php _e('Image', 'woptical'); ?></label>
+    <input type="hidden" id="category_image_id" name="category_image_id" class="custom_media_url" value="">
     <div id="image_wrapper"></div>
     <p>
         <input type="button" class="button button-secondary taxonomy_media_button" id="taxonomy_media_button" name="taxonomy_media_button" value="<?php _e('Add', 'woptical'); ?>">
@@ -210,8 +210,8 @@ class Woptical_Admin
      */
     public function save_woocommerce_terms_image($term_id, $tt_id)
     {
-        if (isset($_POST['image_id']) && '' !== $_POST['image_id']) {
-            $image = $_POST['image_id'];
+        if (isset($_POST['category_image_id']) && '' !== $_POST['category_image_id']) {
+            $image = $_POST['category_image_id'];
             add_term_meta($term_id, 'category_image_id', $image, true);
         }
     }
@@ -224,11 +224,11 @@ class Woptical_Admin
     public function update_woocommerce_terms_image($term, $taxonomy) { ?>
 <tr class="form-field term-group-wrap">
     <th scope="row">
-        <label for="image_id"><?php _e('Image', 'woptical'); ?></label>
+        <label for="category_image_id"><?php _e('Image', 'woptical'); ?></label>
     </th>
     <td>
-        <?php $image_id = get_term_meta($term -> term_id, 'image_id', true); ?>
-        <input type="hidden" id="image_id" name="image_id" value="<?php echo $image_id; ?>">
+        <?php $image_id = get_term_meta($term->term_id, 'category_image_id', true); ?>
+        <input type="hidden" id="category_image_id" name="category_image_id" value="<?php echo $image_id; ?>">
 
         <div id="image_wrapper">
             <?php if ($image_id) { ?>
@@ -253,11 +253,11 @@ class Woptical_Admin
      */
     public function updated_edited_woocommerce_terms_image($term_id, $tt_id)
     {
-        if (isset($_POST['image_id']) && '' !== $_POST['image_id']) {
-            $image = $_POST['image_id'];
-            update_term_meta($term_id, 'image_id', $image);
+        if (isset($_POST['category_image_id']) && '' !== $_POST['category_image_id']) {
+            $image = $_POST['category_image_id'];
+            update_term_meta($term_id, 'category_image_id', $image);
         } else {
-            update_term_meta($term_id, 'image_id', '');
+            update_term_meta($term_id, 'category_image_id', '');
         }
     }
 
@@ -281,7 +281,7 @@ class Woptical_Admin
     public function display_image_column_value($columns, $column, $id)
     {
         if ('category_image' == $column) {
-            $image_id = esc_html(get_term_meta($id, 'image_id', true));
+            $image_id = esc_html(get_term_meta($id, 'category_image_id', true));
             $columns = wp_get_attachment_image($image_id, array('50', '50'));
         }
         return $columns;
