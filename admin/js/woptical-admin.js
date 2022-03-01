@@ -46,16 +46,12 @@ jQuery(document).ready(function($) {
         var dataCol = jQuery.parseJSON(custom_admin_url.custom_spheres_values);
         var dataRow = jQuery.parseJSON(custom_admin_url.custom_cilinder_values);
 
-        dataActual = JSON.parse(dataActual.replace(/\\/g, ""));
-
         var columnsVar = {
             type: 'text',
             title: 'Spheres/Cilinders',
             width: 100
         }
         currentColumns.push(columnsVar);
-
-
 
         for (let index = 0; index < dataCol.length; index++) {
             columnsVar = {
@@ -71,6 +67,7 @@ jQuery(document).ready(function($) {
             }
 
         } else {
+            dataActual = JSON.parse(dataActual.replace(/\\/g, ""));
             var data = dataActual;
         }
 
@@ -104,6 +101,7 @@ jQuery(document).ready(function($) {
                 }
             });
         });
+        
 
     }
 });

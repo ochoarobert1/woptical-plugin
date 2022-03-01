@@ -131,6 +131,151 @@ class Woptical_Public
         </div>
     </div>
     <?php $i++; } ?>
+
+    <div class="custom-optical-options-item-content custom-optical-options-item-4">
+        <header id="heading4" class="custom-option-title" data-accordion="4">
+            <h3>4.- <?php _e('Formula', 'woptical'); ?></h3>
+        </header>
+        <div class="custom-options-content">
+            <div class="custom-optical-tab-container">
+                <ul class="custom-optical-tab-buttons">
+                    <li>
+                        <a id="far-tab" class="tab-link tab-active" href="#"><?php _e('Far', 'woptical'); ?></a>
+                    </li>
+                    <li>
+                        <a id="close-tab" class="tab-link" href="#"><?php _e('Close', 'woptical'); ?></a>
+                    </li>
+                </ul>
+                <?php $term_sphere = get_terms(array( 'taxonomy' => 'pa_esfera', 'hide_empty' => false )); ?>
+                <?php foreach ($term_sphere as $term) {
+                $arr_sphere[$term->term_id] = $term->name;
+            } ?>
+                <?php $term_cilinder = get_terms(array( 'taxonomy' => 'pa_cilindro', 'hide_empty' => false )); ?>
+                <?php foreach ($term_cilinder as $term) {
+                $arr_cilinder[$term->term_id] = $term->name;
+            } ?>
+
+                <div class="custom-optical-tab-content">
+                    <div class="custom-optical-tab-item" data-button="far-tab">
+                        <table class="custom-optical-table">
+                            <tr>
+                                <th></th>
+                                <th><?php _e('Sph', 'woptical'); ?></th>
+                                <th><?php _e('Cil', 'woptical'); ?></th>
+                                <th><?php _e('Axis', 'woptical'); ?></th>
+                                <th><?php _e('DP', 'woptical'); ?></th>
+                            </tr>
+                            <tr>
+                                <td><?php _e('LE', 'woptical')?></td>
+                                <td>
+                                    <select name="le_far_sphere" id="le_far_sphere">
+                                        <?php foreach ($arr_sphere as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="le_far_cilinder" id="le_far_cilinder">
+                                        <?php foreach ($arr_cilinder as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="le_far_axis" id="le_far_axis" />
+                                </td>
+                                <td>
+                                    <input type="number" name="le_far_dp" id="le_far_dp" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><?php _e('RE', 'woptical')?></td>
+                                <td>
+                                    <select name="re_far_sphere" id="re_far_sphere">
+                                        <?php foreach ($arr_sphere as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="re_far_cilinder" id="re_far_cilinder">
+                                        <?php foreach ($arr_cilinder as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="re_far_axis" id="re_far_axis" />
+                                </td>
+                                <td>
+                                    <input type="number" name="re_far_dp" id="re_far_dp" />
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="custom-optical-tab-item tab-hidden" data-button="close-tab">
+                        <table class="custom-optical-table">
+                            <tr>
+                                <th></th>
+                                <th><?php _e('Sph', 'woptical'); ?></th>
+                                <th><?php _e('Cil', 'woptical'); ?></th>
+                                <th><?php _e('Axis', 'woptical'); ?></th>
+                                <th><?php _e('DP', 'woptical'); ?></th>
+                            </tr>
+                            <tr>
+                                <td><?php _e('LE', 'woptical')?></td>
+                                <td>
+                                    <select name="le_close_sphere" id="le_close_sphere">
+                                        <?php foreach ($arr_sphere as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="le_close_cilinder" id="le_close_cilinder">
+                                        <?php foreach ($arr_cilinder as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="le_close_axis" id="le_close_axis" />
+                                </td>
+                                <td>
+                                    <input type="number" name="le_close_dp" id="le_close_dp" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><?php _e('RE', 'woptical')?></td>
+                                <td>
+                                    <select name="re_close_sphere" id="re_close_sphere">
+                                        <?php foreach ($arr_sphere as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="re_close_cilinder" id="re_close_cilinder">
+                                        <?php foreach ($arr_cilinder as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="re_close_axis" id="re_close_axis" />
+                                </td>
+                                <td>
+                                    <input type="number" name="re_close_dp" id="re_close_dp" />
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <?php
         }
